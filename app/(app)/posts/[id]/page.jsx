@@ -4,7 +4,8 @@ import { prisma } from '@/lib/db';
 import { canAccessClient } from '@/lib/access';
 import { canApprove } from '@/lib/permissions';
 import { STATUS, TYPE, PLATFORM, initialsOf } from '@/lib/ui';
-import { addComment, setStatus } from './actions';
+import ReviewActions from '@/components/ReviewActions';
+import ReviewComposer from '@/components/ReviewComposer';
 
 export const dynamic = 'force-dynamic';
 
@@ -77,18 +78,7 @@ export default async function PostPage({ params }) {
               {allowApprove && <span className="lbl" data-ar="اعتمادك هو الخطوة الأخيرة">Your sign-off is the final step</span>}
             </div>
             {allowApprove ? (
-              <div className="acts">
-                <form action={setStatus}>
-                  <input type="hidden" name="postId" value={post.id} />
-                  <input type="hidden" name="status" value="revision" />
-                  <button className="btn" type="submit"><i className="ti ti-rotate" /> <span data-ar="طلب تعديل">Request revision</span></button>
-                </form>
-                <form action={setStatus}>
-                  <input type="hidden" name="postId" value={post.id} />
-                  <input type="hidden" name="status" value="approved" />
-                  <button className="btn btn-approve" type="submit"><i className="ti ti-check" /> <span data-ar="اعتماد">Approve</span></button>
-                </form>
-              </div>
+              <ReviewActions postId={post.id} />
             ) : (
               <div className="approve-note"><i className="ti ti-info-circle" /> <span data-ar="الاعتماد النهائي من صلاحية العميل">Final approval is the client's to give</span></div>
             )}
@@ -122,15 +112,7 @@ export default async function PostPage({ params }) {
           })}
         </div>
 
-        <form className="composer" action={addComment}>
-          <input type="hidden" name="postId" value={post.id} />
-          <div className="box">
-            <textarea name="body" placeholder="Add a comment…" data-ar-ph="أضف تعليقاً…" required />
-            <div className="tools">
-              <button className="btn btn-primary btn-sm" type="submit"><i className="ti ti-send" /> <span data-ar="إرسال">Send</span></button>
-            </div>
-          </div>
-        </form>
+        <ReviewComposer postId={post.id} />
       </aside>
     </div>
   );

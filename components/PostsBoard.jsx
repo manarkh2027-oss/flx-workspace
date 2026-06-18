@@ -35,9 +35,9 @@ export default function PostsBoard({ posts, banner, clientName, clientNameAr }) 
         </div>
         <div className="week-nav">
           <Link className="btn btn-ghost btn-sm" href="/campaigns" data-ar="عرض الحملات">View campaigns</Link>
-          <button className="btn btn-icon btn-sm" type="button"><i className="ti ti-chevron-left" /></button>
+          <button className="btn btn-icon btn-sm" type="button" data-soon="العرض الحالي يعرض منشورات هذا الأسبوع"><i className="ti ti-chevron-left" /></button>
           <span className="pill"><i className="ti ti-calendar" style={{ fontSize: 16, color: 'var(--ink-3)' }} /> <span data-ar="هذا الأسبوع">This week</span></span>
-          <button className="btn btn-icon btn-sm" type="button"><i className="ti ti-chevron-right" /></button>
+          <button className="btn btn-icon btn-sm" type="button" data-soon="العرض الحالي يعرض منشورات هذا الأسبوع"><i className="ti ti-chevron-right" /></button>
         </div>
       </div>
 

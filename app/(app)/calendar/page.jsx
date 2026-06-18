@@ -42,14 +42,14 @@ export default async function CalendarPage() {
     <div className="page">
       <div className="cal-head">
         <div className="cal-nav">
-          <button className="btn btn-icon btn-sm" type="button"><i className="ti ti-chevron-left" /></button>
+          <button className="btn btn-icon btn-sm" type="button" data-soon="العرض التجريبي يعرض شهر يونيو 2026"><i className="ti ti-chevron-left" /></button>
           <span className="mo" data-ar="يونيو 2026">June 2026</span>
-          <button className="btn btn-icon btn-sm" type="button"><i className="ti ti-chevron-right" /></button>
-          <button className="btn btn-sm" type="button" data-ar="اليوم">Today</button>
+          <button className="btn btn-icon btn-sm" type="button" data-soon="العرض التجريبي يعرض شهر يونيو 2026"><i className="ti ti-chevron-right" /></button>
+          <button className="btn btn-sm" type="button" data-soon="العرض التجريبي يعرض شهر يونيو 2026" data-ar="اليوم">Today</button>
         </div>
         <div className="view-seg">
           <button className="active" type="button" data-ar="شهر">Month</button>
-          <button type="button" data-ar="أسبوع">Week</button>
+          <button type="button" data-soon="العرض الأسبوعي قادم قريباً" data-ar="أسبوع">Week</button>
         </div>
       </div>
 

@@ -25,7 +25,7 @@ export default async function CampaignsPage() {
           const approved = c.posts.filter((p) => p.status === 'approved' || p.status === 'published').length;
           const pct = total ? Math.round((approved / total) * 100) : 0;
           return (
-            <Link className="camp-card" href="/" key={c.id}>
+            <Link className="camp-card" href="/" key={c.id} data-soon="صفحة تفاصيل الحملة قادمة قريباً">
               <span className="cov"><i className="ti ti-folder" /></span>
               <div className="nm" data-ar={c.nameAr || undefined}>{c.name}</div>
               <div className="ct" data-ar={`${total} عناصر · ${approved} معتمد`}>{`${total} items · ${approved} approved`}</div>

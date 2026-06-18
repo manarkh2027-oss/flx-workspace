@@ -38,15 +38,15 @@ export default async function BrandPage() {
                 <div className="canvas light">
                   {logo ? <img src={logo} alt={client?.name} /> : <span className="wm" style={{ color: primary }}>{client?.initials || 'ن'}</span>}
                 </div>
-                <div className="foot"><span className="nm" data-ar="الشعار الأساسي">Primary logo</span><button><i className="ti ti-download" /></button></div>
+                <div className="foot"><span className="nm" data-ar="الشعار الأساسي">Primary logo</span><button data-soon="تنزيل ملفات الهوية قادم قريباً"><i className="ti ti-download" /></button></div>
               </div>
               <div className="logo-tile">
                 <div className="canvas brand" style={{ background: primary }}><span className="wm" style={{ color: '#fff' }}>{client?.initials || 'ن'}</span></div>
-                <div className="foot"><span className="nm" data-ar="معكوس">Reversed</span><button><i className="ti ti-download" /></button></div>
+                <div className="foot"><span className="nm" data-ar="معكوس">Reversed</span><button data-soon="تنزيل ملفات الهوية قادم قريباً"><i className="ti ti-download" /></button></div>
               </div>
               <div className="logo-tile">
                 <div className="canvas dark"><span className="wm" style={{ color: '#fff' }}>{client?.initials || 'ن'}</span></div>
-                <div className="foot"><span className="nm" data-ar="أحادي اللون">Monochrome</span><button><i className="ti ti-download" /></button></div>
+                <div className="foot"><span className="nm" data-ar="أحادي اللون">Monochrome</span><button data-soon="تنزيل ملفات الهوية قادم قريباً"><i className="ti ti-download" /></button></div>
               </div>
             </div>
           </section>

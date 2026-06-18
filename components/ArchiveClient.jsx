@@ -11,8 +11,8 @@ const FILTERS = [
   { key: 'copy', en: 'Copy', ar: 'نصوص' },
 ];
 
-export default function ArchiveClient({ items }) {
-  const [q, setQ] = useState('');
+export default function ArchiveClient({ items, initialQuery }) {
+  const [q, setQ] = useState(initialQuery || '');
   const [filter, setFilter] = useState('all');
 
   const shown = items.filter((it) => {

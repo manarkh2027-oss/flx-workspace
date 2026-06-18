@@ -36,7 +36,7 @@ export default async function SettingsPage() {
                 <span className="avatar a4">{initialsOf(user?.fullName)}</span>
                 <div className="col" style={{ gap: 8 }}>
                   <span className="badge badge--brand" style={{ height: 24, width: 'fit-content' }} data-ar={role.ar}>{role.en}</span>
-                  <button className="btn btn-sm"><i className="ti ti-upload" /> <span data-ar="تغيير الصورة">Change photo</span></button>
+                  <button className="btn btn-sm" data-soon="رفع صورة الملف الشخصي قادم قريباً"><i className="ti ti-upload" /> <span data-ar="تغيير الصورة">Change photo</span></button>
                 </div>
               </div>
               <div className="grid2">
@@ -44,7 +44,7 @@ export default async function SettingsPage() {
                 <div className="field"><label data-ar="اسم المستخدم">Username</label><input className="input" defaultValue={user?.username} readOnly /></div>
               </div>
               <div className="row" style={{ justifyContent: 'flex-end', marginTop: 16 }}>
-                <button className="btn btn-primary btn-sm"><i className="ti ti-check" /> <span data-ar="حفظ التغييرات">Save changes</span></button>
+                <button className="btn btn-primary btn-sm" data-soon="حفظ الملف الشخصي قادم قريباً — أمّا البريد والهاتف فيُحفظان من قسم الإشعارات"><i className="ti ti-check" /> <span data-ar="حفظ التغييرات">Save changes</span></button>
               </div>
             </div>
 
@@ -74,7 +74,7 @@ export default async function SettingsPage() {
               <h2 data-ar="الدعم والحساب">Support &amp; account</h2>
               <div className="sub" data-ar="فريق FLX جاهز لمساعدتك">The FLX team is here to help</div>
               <div className="row" style={{ gap: 10 }}>
-                <button className="btn"><i className="ti ti-message-circle" /> <span data-ar="تواصل مع الدعم">Contact support</span></button>
+                <a className="btn" href="mailto:support@flxcreative.ps?subject=FLX%20Workspace"><i className="ti ti-message-circle" /> <span data-ar="تواصل مع الدعم">Contact support</span></a>
                 <LogoutButton style={{ color: 'var(--red-ink)' }} />
               </div>
             </div>

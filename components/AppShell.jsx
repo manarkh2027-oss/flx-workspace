@@ -4,7 +4,9 @@ import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { initialsOf } from '@/lib/ui';
 import { roleLabel } from '@/lib/permissions';
-import { setActiveClient } from '@/app/actions';
+import TopSearch from '@/components/TopSearch';
+import Toaster from '@/components/Toaster';
+import { toast } from '@/lib/toast';
 
 const NAV = [
   { href: '/', icon: 'ti-home', en: 'Home', ar: 'الرئيسية' },
@@ -37,6 +39,19 @@ export default function AppShell({ user, clients, activeClient, canSwitch, child
     setDark(document.documentElement.getAttribute('data-theme') === 'dark');
   }, []);
 
+  // Any button/link marked data-soon gives clear feedback instead of doing nothing.
+  useEffect(() => {
+    const onClick = (e) => {
+      const el = e.target.closest('[data-soon]');
+      if (el) {
+        e.preventDefault();
+        toast(el.getAttribute('data-soon') || 'هذه الميزة قادمة قريباً 🚧', 'warn');
+      }
+    };
+    document.addEventListener('click', onClick);
+    return () => document.removeEventListener('click', onClick);
+  }, []);
+
   function toggleTheme() {
     const next = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
     document.documentElement.setAttribute('data-theme', next);
@@ -50,6 +65,16 @@ export default function AppShell({ user, clients, activeClient, canSwitch, child
   async function logout() {
     await fetch('/api/auth/logout', { method: 'POST' });
     router.push('/login');
+    router.refresh();
+  }
+
+  async function switchClient(clientId) {
+    setMenuOpen(false);
+    await fetch('/api/active-client', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ clientId }),
+    });
     router.refresh();
   }
 
@@ -73,14 +98,12 @@ export default function AppShell({ user, clients, activeClient, canSwitch, child
             {menuOpen && canSwitch && (
               <div className="client-menu">
                 {clients.map((c) => (
-                  <form action={setActiveClient} key={c.id} onSubmit={() => setMenuOpen(false)}>
-                    <input type="hidden" name="clientId" value={c.id} />
-                    <button type="submit" className={'client-menu-item' + (c.id === activeClient?.id ? ' active' : '')}>
-                      <span className="logo-sm">{c.initials}</span>
-                      <span className="cn" data-ar={c.nameAr || undefined}>{c.name}</span>
-                      {c.id === activeClient?.id && <i className="ti ti-check" />}
-                    </button>
-                  </form>
+                  <button type="button" key={c.id} onClick={() => switchClient(c.id)}
+                    className={'client-menu-item' + (c.id === activeClient?.id ? ' active' : '')}>
+                    <span className="logo-sm">{c.initials}</span>
+                    <span className="cn" data-ar={c.nameAr || undefined}>{c.name}</span>
+                    {c.id === activeClient?.id && <i className="ti ti-check" />}
+                  </button>
                 ))}
               </div>
             )}
@@ -120,9 +143,7 @@ export default function AppShell({ user, clients, activeClient, canSwitch, child
       <div className="main">
         <header className="topbar">
           <div className="crumbs"><span className="here" data-ar={crumb.ar}>{crumb.en}</span></div>
-          <div className="search-bar">
-            <i className="ti ti-search" /><span className="ph" data-ar="ابحث في منشوراتك…">Search your posts…</span><span className="kbd">⌘K</span>
-          </div>
+          <TopSearch />
           <div className="lang-seg">
             <button type="button" data-lang="ar">عربي</button>
             <button type="button" data-lang="en">English</button>
@@ -135,6 +156,7 @@ export default function AppShell({ user, clients, activeClient, canSwitch, child
 
         {children}
       </div>
+      <Toaster />
     </div>
   );
 }

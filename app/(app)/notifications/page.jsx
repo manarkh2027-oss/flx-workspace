@@ -1,6 +1,6 @@
 import { getCurrentUser } from '@/lib/auth';
 import { prisma } from '@/lib/db';
-import { markAllRead } from './actions';
+import MarkAllReadButton from '@/components/MarkAllReadButton';
 
 export const dynamic = 'force-dynamic';
 
@@ -34,9 +34,7 @@ export default async function NotificationsPage() {
           <div className="display" data-ar="الإشعارات">Notifications</div>
           <div className="muted" data-ar={`${unread} إشعارات غير مقروءة`}>{`${unread} unread notifications`}</div>
         </div>
-        <form action={markAllRead}>
-          <button className="btn btn-sm" type="submit"><i className="ti ti-checks" /> <span data-ar="تحديد الكل كمقروء">Mark all as read</span></button>
-        </form>
+        <MarkAllReadButton />
       </div>
 
       {notes.length === 0 && <p className="hint" data-ar="لا توجد إشعارات بعد.">No notifications yet.</p>}
