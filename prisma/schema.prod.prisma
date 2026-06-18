@@ -1,0 +1,107 @@
+// Production schema — PostgreSQL (used on Vercel via the "vercel-build" script).
+// Identical models to prisma/schema.prisma (SQLite, local). Only the provider differs,
+// so the generated Prisma Client API is the same.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Workspace {
+  id      String   @id @default(cuid())
+  name    String
+  clients Client[]
+  users   User[]
+}
+
+model Client {
+  id          String     @id @default(cuid())
+  workspaceId String
+  workspace   Workspace  @relation(fields: [workspaceId], references: [id])
+  name        String
+  nameAr      String?
+  initials    String     @default("ن")
+  brandJson   String?
+  logoUrl     String?
+  bannerUrl   String?
+  users       User[]
+  campaigns   Campaign[]
+  posts       Post[]
+}
+
+model User {
+  id           String    @id @default(cuid())
+  workspaceId  String
+  workspace    Workspace @relation(fields: [workspaceId], references: [id])
+  clientId     String?
+  client       Client?   @relation(fields: [clientId], references: [id])
+  username     String    @unique
+  passwordHash String
+  fullName     String
+  role         String    @default("client")
+  email          String?
+  phone          String?
+  notifyEmail    Boolean   @default(true)
+  notifyWhatsapp Boolean   @default(true)
+  comments     Comment[]
+  notifications Notification[]
+}
+
+model Notification {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  type      String
+  titleEn   String
+  titleAr   String
+  bucket    String   @default("today")
+  read      Boolean  @default(false)
+  createdAt DateTime @default(now())
+}
+
+model Campaign {
+  id        String   @id @default(cuid())
+  clientId  String
+  client    Client   @relation(fields: [clientId], references: [id])
+  name      String
+  nameAr    String?
+  status    String   @default("active")
+  posts     Post[]
+  createdAt DateTime @default(now())
+}
+
+model Post {
+  id         String    @id @default(cuid())
+  clientId   String
+  client     Client    @relation(fields: [clientId], references: [id])
+  campaignId String?
+  campaign   Campaign? @relation(fields: [campaignId], references: [id])
+  title      String
+  titleAr    String?
+  type       String
+  platform   String
+  status     String    @default("review")
+  version    Int       @default(1)
+  publishAt  DateTime?
+  dayEn      String?
+  dayAr      String?
+  body       String?
+  mediaUrl   String?
+  posterUrl  String?
+  comments   Comment[]
+  createdAt  DateTime  @default(now())
+}
+
+model Comment {
+  id        String   @id @default(cuid())
+  postId    String
+  post      Post     @relation(fields: [postId], references: [id])
+  authorId  String
+  author    User     @relation(fields: [authorId], references: [id])
+  body      String
+  createdAt DateTime @default(now())
+}

@@ -1,0 +1,26 @@
+{
+  "name": "flx-workspace",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "setup": "prisma generate && prisma db push --skip-generate && node prisma/seed.js",
+    "seed": "node prisma/seed.js",
+    "postinstall": "prisma generate",
+    "vercel-build": "prisma generate --schema prisma/schema.prod.prisma && prisma db push --schema prisma/schema.prod.prisma --accept-data-loss && SEED_IF_EMPTY=1 node prisma/seed.js && next build"
+  },
+  "dependencies": {
+    "@prisma/client": "5.18.0",
+    "bcryptjs": "2.4.3",
+    "jose": "5.6.3",
+    "next": "^14.2.33",
+    "nodemailer": "^6.10.1",
+    "react": "18.3.1",
+    "react-dom": "18.3.1"
+  },
+  "devDependencies": {
+    "prisma": "5.18.0"
+  }
+}
