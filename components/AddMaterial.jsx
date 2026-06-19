@@ -18,24 +18,31 @@ const PLATFORMS = [
   { key: 'tiktok', en: 'TikTok', ar: 'تيك توك' },
 ];
 
-export default function AddMaterial({ clientId, defaultDate, label, className }) {
+export default function AddMaterial({ clientId, defaultDate, label, className, post }) {
   const router = useRouter();
   const fileRef = useRef(null);
+  const isEdit = !!post;
+  // For an existing video stored as a link (not a data-URL), start in "link" mode.
+  const editIsLink = isEdit && post.type === 'video' && post.mediaUrl && !post.mediaUrl.startsWith('data:');
+
   const [open, setOpen] = useState(false);
-  const [type, setType] = useState('image');
-  const [title, setTitle] = useState('');
-  const [body, setBody] = useState('');
-  const [platform, setPlatform] = useState('instagram');
-  const [date, setDate] = useState(defaultDate || '');
-  const [media, setMedia] = useState('');     // data-url or link
+  const [type, setType] = useState(post?.type || 'image');
+  const [title, setTitle] = useState(post?.title || '');
+  const [body, setBody] = useState(post?.body || '');
+  const [platform, setPlatform] = useState(post?.platform || 'instagram');
+  const [date, setDate] = useState((post?.publishAt ? String(post.publishAt).slice(0, 10) : defaultDate) || '');
+  const [media, setMedia] = useState(isEdit && !editIsLink ? (post.mediaUrl || '') : '');     // data-url or link
   const [mediaName, setMediaName] = useState('');
-  const [videoMode, setVideoMode] = useState('file'); // file | link
-  const [link, setLink] = useState('');
+  const [videoMode, setVideoMode] = useState(editIsLink ? 'link' : 'file'); // file | link
+  const [link, setLink] = useState(editIsLink ? post.mediaUrl : '');
   const [saving, setSaving] = useState(false);
 
   function reset() {
-    setType('image'); setTitle(''); setBody(''); setPlatform('instagram');
-    setDate(defaultDate || ''); setMedia(''); setMediaName(''); setVideoMode('file'); setLink('');
+    setType(post?.type || 'image'); setTitle(post?.title || ''); setBody(post?.body || '');
+    setPlatform(post?.platform || 'instagram');
+    setDate((post?.publishAt ? String(post.publishAt).slice(0, 10) : defaultDate) || '');
+    setMedia(isEdit && !editIsLink ? (post.mediaUrl || '') : ''); setMediaName('');
+    setVideoMode(editIsLink ? 'link' : 'file'); setLink(editIsLink ? post.mediaUrl : '');
   }
   function close() { setOpen(false); reset(); }
 
@@ -66,18 +73,18 @@ export default function AddMaterial({ clientId, defaultDate, label, className })
 
     setSaving(true);
     try {
-      const res = await fetch('/api/posts', {
-        method: 'POST',
+      const res = await fetch(isEdit ? `/api/posts/${post.id}` : '/api/posts', {
+        method: isEdit ? 'PATCH' : 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ clientId, type, title, body, platform, publishAt: date || null, mediaUrl }),
       });
       const j = await res.json().catch(() => ({}));
       if (!res.ok) throw new Error(j.error || 'failed');
-      toast('تم رفع المادة وأُرسلت للمراجعة ✓', 'success');
+      toast(isEdit ? 'تم تحديث المادة وأُرسلت نسخة جديدة للمراجعة ✓' : 'تم رفع المادة وأُرسلت للمراجعة ✓', 'success');
       close();
       router.refresh();
     } catch (err) {
-      toast('تعذّر رفع المادة: ' + (err.message || ''), 'warn');
+      toast((isEdit ? 'تعذّر تحديث المادة: ' : 'تعذّر رفع المادة: ') + (err.message || ''), 'warn');
     } finally {
       setSaving(false);
     }
@@ -86,14 +93,14 @@ export default function AddMaterial({ clientId, defaultDate, label, className })
   return (
     <>
       <button type="button" className={className || 'btn btn-primary btn-sm'} onClick={() => setOpen(true)}>
-        <i className="ti ti-plus" /> <span data-ar={label?.ar || 'أضف مادة'}>{label?.en || 'Add material'}</span>
+        <i className={'ti ' + (isEdit ? 'ti-edit' : 'ti-plus')} /> <span data-ar={label?.ar || (isEdit ? 'تعديل المادة' : 'أضف مادة')}>{label?.en || (isEdit ? 'Edit' : 'Add material')}</span>
       </button>
 
       {open && (
         <div className="modal-overlay" onClick={close}>
           <div className="modal" onClick={(e) => e.stopPropagation()}>
             <div className="modal-head">
-              <h3 data-ar="إضافة مادة جديدة">Add new material</h3>
+              <h3 data-ar={isEdit ? 'تعديل المادة' : 'إضافة مادة جديدة'}>{isEdit ? 'Edit material' : 'Add new material'}</h3>
               <button type="button" className="icon-btn" onClick={close} aria-label="Close"><i className="ti ti-x" /></button>
             </div>
 
@@ -164,7 +171,7 @@ export default function AddMaterial({ clientId, defaultDate, label, className })
             <div className="modal-foot">
               <button type="button" className="btn btn-sm" onClick={close} disabled={saving} data-ar="إلغاء">Cancel</button>
               <button type="button" className="btn btn-primary btn-sm" onClick={submit} disabled={saving}>
-                <i className={'ti ' + (saving ? 'ti-loader-2' : 'ti-upload')} /> {saving ? <span data-ar="جارٍ الرفع…">Uploading…</span> : <span data-ar="رفع المادة">Upload</span>}
+                <i className={'ti ' + (saving ? 'ti-loader-2' : (isEdit ? 'ti-check' : 'ti-upload'))} /> {saving ? <span data-ar="جارٍ الحفظ…">Saving…</span> : <span data-ar={isEdit ? 'حفظ التعديل' : 'رفع المادة'}>{isEdit ? 'Save' : 'Upload'}</span>}
               </button>
             </div>
           </div>

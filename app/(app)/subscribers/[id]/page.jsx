@@ -57,8 +57,9 @@ export default async function SubscriberDetail({ params }) {
         </Link>
         <div className="card-acts">
           <Link className="btn btn-sm" href={`/posts/${p.id}`} style={{ flex: 1, justifyContent: 'center' }}>
-            <i className="ti ti-message-circle" /> <span data-ar={p.status === 'revision' ? 'الرد على الزبون' : 'فتح ومتابعة'}>{p.status === 'revision' ? 'Reply to client' : 'Open'}</span>
+            <i className="ti ti-message-circle" /> <span data-ar={p.status === 'revision' ? 'الرد على الزبون' : 'فتح ومتابعة'}>{p.status === 'revision' ? 'Reply' : 'Open'}</span>
           </Link>
+          <AddMaterial className="btn btn-sm" post={{ id: p.id, type: p.type, title: p.title, body: p.body || '', platform: p.platform, publishAt: p.publishAt, mediaUrl: p.mediaUrl }} />
         </div>
       </div>
     );

@@ -7,6 +7,7 @@ import { STATUS, TYPE, PLATFORM, initialsOf } from '@/lib/ui';
 import ReviewActions from '@/components/ReviewActions';
 import ReviewComposer from '@/components/ReviewComposer';
 import AgencyReply from '@/components/AgencyReply';
+import AddMaterial from '@/components/AddMaterial';
 
 export const dynamic = 'force-dynamic';
 
@@ -50,7 +51,15 @@ export default async function PostPage({ params }) {
                 {post.campaign && (<><span className="sep" /><span data-ar={post.campaign.nameAr || undefined}>{post.campaign.name}</span></>)}
               </div>
             </div>
-            <span className={'badge ' + s.badge} style={{ height: 28, fontSize: 12.5 }}><span className="dot" /> <span data-ar={s.ar}>{s.en}</span></span>
+            <div className="row" style={{ gap: 10 }}>
+              {isAgency(user.role) && (
+                <AddMaterial
+                  className="btn btn-sm"
+                  post={{ id: post.id, type: post.type, title: post.title, body: post.body || '', platform: post.platform, publishAt: post.publishAt, mediaUrl: post.mediaUrl }}
+                />
+              )}
+              <span className={'badge ' + s.badge} style={{ height: 28, fontSize: 12.5 }}><span className="dot" /> <span data-ar={s.ar}>{s.en}</span></span>
+            </div>
           </div>
 
           {post.type === 'copy' ? (
