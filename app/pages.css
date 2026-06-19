@@ -125,6 +125,43 @@ html[dir="rtl"] select.input{background-position:left 12px center}
 .rev-note{margin-top:9px;display:flex;gap:7px;align-items:flex-start;font-size:12px;color:var(--amber-ink);background:var(--amber-soft);padding:7px 9px;border-radius:8px;line-height:1.45}
 .rev-note i{font-size:15px;flex:none;margin-top:1px}
 
+/* ---------- Publishing: connected accounts ---------- */
+.acct-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px}
+.acct-card{display:flex;flex-direction:column;gap:14px;padding:16px;background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);box-shadow:var(--sh-sm)}
+.acct-top{display:flex;align-items:center;gap:12px}
+.acct-ic{width:42px;height:42px;border-radius:11px;background:var(--surface-2);display:flex;align-items:center;justify-content:center;font-size:22px;flex:none}
+.acct-meta{min-width:0}
+.acct-name{font-size:14.5px;font-weight:600}
+.acct-name .acct-ar{font-size:12px;color:var(--ink-3);font-weight:500;margin-inline-start:6px}
+.acct-status{font-size:12px;font-weight:500;margin-top:3px}
+.acct-status.on{color:var(--green-ink)}
+.acct-status.off{color:var(--ink-3)}
+.acct-status.na{color:var(--amber-ink)}
+
+/* ---------- Publishing center ---------- */
+.pipeline{display:flex;flex-wrap:wrap;align-items:center;gap:6px;padding:14px 16px;background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);margin-bottom:22px}
+.pl-step{display:flex;align-items:center;gap:8px;font-size:12.5px;font-weight:500;color:var(--ink-2)}
+.pl-ic{width:30px;height:30px;border-radius:9px;background:var(--brand-soft);color:var(--brand-700,var(--brand-ink));display:flex;align-items:center;justify-content:center;font-size:16px}
+.pl-arrow{color:var(--ink-4);font-size:16px;margin:0 4px}
+.ready-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px}
+.ready-item{display:flex;flex-direction:column;gap:11px;padding:14px;background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);box-shadow:var(--sh-sm)}
+.ri-head{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.ri-title{display:flex;align-items:center;gap:8px;font-size:13.5px;font-weight:600;min-width:0}
+.ri-title i{color:var(--brand);flex:none}
+.ri-title span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ri-client{font-size:12px;color:var(--ink-3);flex:none}
+.ri-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.plat-ic.dim{opacity:.45}
+
+.jobs-list{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);overflow:hidden;box-shadow:var(--sh-sm)}
+.job-row{display:flex;align-items:center;gap:12px;padding:12px 16px;border-bottom:1px solid var(--border);flex-wrap:wrap}
+.job-row:last-child{border-bottom:none}
+.job-plat{font-size:19px;color:var(--ink-2);flex:none}
+.job-title{font-size:13.5px;font-weight:500;flex:1;min-width:120px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.job-when{font-size:12px;color:var(--ink-3);font-variant-numeric:tabular-nums}
+.job-extra{display:flex;align-items:center;gap:10px;font-size:12px}
+.job-err{color:var(--red-ink);display:flex;align-items:center;gap:5px}
+
 /* ---------- Admin timelines (scheduled / published) ---------- */
 .day-filter{display:flex;align-items:center;gap:8px;height:38px;padding:0 12px;background:var(--surface);border:1px solid var(--border-2);border-radius:var(--r-md);color:var(--ink-2)}
 .day-filter > i{font-size:18px;color:var(--ink-3)}

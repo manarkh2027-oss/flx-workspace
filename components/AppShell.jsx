@@ -17,6 +17,8 @@ const NAV = [
 ];
 const MANAGE_NAV = [
   { href: '/subscribers', icon: 'ti-users', en: 'Subscribers', ar: 'الزبائن والمشتركين' },
+  { href: '/publishing', icon: 'ti-rocket', en: 'Publishing Center', ar: 'مركز النشر' },
+  { href: '/connected-accounts', icon: 'ti-plug', en: 'Connected accounts', ar: 'الحسابات المرتبطة' },
   { href: '/scheduled', icon: 'ti-calendar-clock', en: 'Scheduled', ar: 'منشورات مجدولة للنشر' },
   { href: '/published', icon: 'ti-checkbox', en: 'Published', ar: 'مواد منشورة' },
 ];
@@ -31,6 +33,8 @@ const CRUMB = {
   '/brand': { en: 'Brand Hub', ar: 'الهوية البصرية' },
   '/archive': { en: 'Archive', ar: 'الأرشيف' },
   '/subscribers': { en: 'Subscribers', ar: 'الزبائن والمشتركين' },
+  '/publishing': { en: 'Publishing Center', ar: 'مركز النشر' },
+  '/connected-accounts': { en: 'Connected accounts', ar: 'الحسابات المرتبطة' },
   '/scheduled': { en: 'Scheduled', ar: 'منشورات مجدولة للنشر' },
   '/published': { en: 'Published', ar: 'مواد منشورة' },
   '/notifications': { en: 'Notifications', ar: 'الإشعارات' },

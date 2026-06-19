@@ -12,6 +12,8 @@ model Workspace {
   name    String
   clients Client[]
   users   User[]
+  socialAccounts SocialAccount[]
+  publishingJobs PublishingJob[]
 }
 
 model Client {
@@ -91,7 +93,70 @@ model Post {
   mediaUrl   String?
   posterUrl  String?
   comments   Comment[]
+  publishingJobs PublishingJob[]
   createdAt  DateTime  @default(now())
+}
+
+// ============================================================
+//  SOCIAL PUBLISHING ENGINE
+// ============================================================
+
+// One connected social account per platform, per workspace (admin-level).
+// Tokens are stored encrypted at rest — see lib/publishing/crypto.js.
+model SocialAccount {
+  id             String    @id @default(cuid())
+  workspaceId    String
+  workspace      Workspace @relation(fields: [workspaceId], references: [id])
+  platform       String    // facebook | instagram | linkedin | tiktok | youtube | x
+  status         String    @default("disconnected") // connected | disconnected | expired | error
+  externalId     String?   // platform account / page / channel id
+  accountName    String?   // display name or @handle
+  accessToken    String?   // ENCRYPTED (crypto.js). NEVER expose to the client.
+  refreshToken   String?   // ENCRYPTED
+  tokenExpiresAt DateTime?
+  scopes         String?   // granted scopes
+  meta           String?   // JSON: platform-specific ids (page id, IG business id, channel id…)
+  connectedById  String?
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+
+  @@unique([workspaceId, platform])
+}
+
+// One publish attempt of a material to a single platform. This is the queue row.
+model PublishingJob {
+  id              String    @id @default(cuid())
+  workspaceId     String
+  workspace       Workspace @relation(fields: [workspaceId], references: [id])
+  postId          String
+  post            Post      @relation(fields: [postId], references: [id])
+  clientId        String
+  platform        String
+  socialAccountId String?
+  status          String    @default("pending") // pending | publishing | published | failed | retry
+  scheduledAt     DateTime? // null = publish as soon as the queue runs
+  attempts        Int       @default(0)
+  maxAttempts     Int       @default(3)
+  externalPostId  String?   // id returned by the platform
+  externalUrl     String?   // public URL of the published post
+  error           String?   // last error message
+  payload         String?   // JSON snapshot of the request we built
+  createdById     String?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+  publishedAt     DateTime?
+  logs            PublishingLog[]
+}
+
+// Append-only audit trail for each job (every state change + API response).
+model PublishingLog {
+  id        String   @id @default(cuid())
+  jobId     String
+  job       PublishingJob @relation(fields: [jobId], references: [id])
+  level     String   @default("info") // info | warn | error
+  message   String
+  data      String?  // JSON
+  createdAt DateTime @default(now())
 }
 
 model Comment {

@@ -13,19 +13,28 @@ export default function PublishBar({ postId, requested = [], platform, publishAt
   const [confirmDel, setConfirmDel] = useState(false);
   const [busy, setBusy] = useState(false);
 
+  // Routes through the real Publishing Engine: creates a publishing job and, for
+  // "now", runs the pipeline. No fake success — the toast reflects the real result.
   async function publish(now) {
     if (!now && !date) { toast('اختر تاريخ الجدولة', 'warn'); return; }
     setBusy(true);
     try {
-      const res = await fetch(`/api/posts/${postId}/publish`, {
+      const res = await fetch('/api/publishing/jobs', {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ platform: pick, now, publishAt: now ? null : date }),
+        body: JSON.stringify({ postId, platforms: [pick], now, scheduledAt: now ? null : date }),
       });
-      if (!res.ok) throw new Error();
-      toast(now ? `تم نشر المادة على ${PLATFORM_AR[pick] || pick} ✓` : `تمت جدولة المادة على ${PLATFORM_AR[pick] || pick} ✓`, 'success');
+      const j = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(j.error || 'failed');
+      if (now) {
+        const r = (j.results || [])[0];
+        if (r?.ok) toast(`تم نشر المادة على ${PLATFORM_AR[pick] || pick} ✓`, 'success');
+        else toast(`أُنشئت مهمة النشر لكن لم تكتمل — راجع «مركز النشر» للتفاصيل`, 'warn');
+      } else {
+        toast(`تمت جدولة النشر على ${PLATFORM_AR[pick] || pick} ✓`, 'success');
+      }
       setPick(null);
       router.refresh();
-    } catch { toast('تعذّر تنفيذ العملية', 'error'); }
+    } catch (e) { toast('تعذّر تنفيذ العملية: ' + (e.message || ''), 'error'); }
     setBusy(false);
   }
 

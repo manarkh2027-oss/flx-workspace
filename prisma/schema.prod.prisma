@@ -16,6 +16,8 @@ model Workspace {
   name    String
   clients Client[]
   users   User[]
+  socialAccounts SocialAccount[]
+  publishingJobs PublishingJob[]
 }
 
 model Client {
@@ -95,6 +97,7 @@ model Post {
   mediaUrl   String?
   posterUrl  String?
   comments   Comment[]
+  publishingJobs PublishingJob[]
   createdAt  DateTime  @default(now())
 }
 
