@@ -38,6 +38,7 @@ model User {
   username     String    @unique
   passwordHash String
   fullName     String
+  avatarUrl    String?
   role         String    @default("client") // super_admin | account_manager | designer | editor | client
   email          String?
   phone          String?

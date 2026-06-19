@@ -1,9 +1,10 @@
 import { getCurrentUser } from '@/lib/auth';
-import { initialsOf } from '@/lib/ui';
 import { roleLabel } from '@/lib/permissions';
 import { whatsappConfigured } from '@/lib/notify/whatsapp';
 import LogoutButton from '@/components/LogoutButton';
 import NotificationSettings from '@/components/NotificationSettings';
+import ProfileCard from '@/components/ProfileCard';
+import PasswordCard from '@/components/PasswordCard';
 
 export const dynamic = 'force-dynamic';
 
@@ -21,34 +22,22 @@ export default async function SettingsPage() {
 
         <div className="set-layout">
           <nav className="set-nav">
-            <a className="active"><i className="ti ti-user" /> <span data-ar="الملف الشخصي">Profile</span></a>
-            <a><i className="ti ti-lock" /> <span data-ar="كلمة المرور">Password</span></a>
-            <a><i className="ti ti-language" /> <span data-ar="اللغة والمظهر">Language</span></a>
-            <a><i className="ti ti-bell" /> <span data-ar="الإشعارات">Notifications</span></a>
-            <a><i className="ti ti-help" /> <span data-ar="الدعم">Support</span></a>
+            <a className="active" href="#profile"><i className="ti ti-user" /> <span data-ar="الملف الشخصي">Profile</span></a>
+            <a href="#password"><i className="ti ti-lock" /> <span data-ar="كلمة المرور">Password</span></a>
+            <a href="#language"><i className="ti ti-language" /> <span data-ar="اللغة والمظهر">Language</span></a>
+            <a href="#notifications"><i className="ti ti-bell" /> <span data-ar="الإشعارات">Notifications</span></a>
+            <a href="#support"><i className="ti ti-help" /> <span data-ar="الدعم">Support</span></a>
           </nav>
 
           <div>
-            <div className="card scard">
-              <h2 data-ar="الملف الشخصي">Profile</h2>
-              <div className="sub" data-ar="معلوماتك الأساسية كما تظهر للفريق">Your basic information as the team sees it</div>
-              <div className="prof">
-                <span className="avatar a4">{initialsOf(user?.fullName)}</span>
-                <div className="col" style={{ gap: 8 }}>
-                  <span className="badge badge--brand" style={{ height: 24, width: 'fit-content' }} data-ar={role.ar}>{role.en}</span>
-                  <button className="btn btn-sm" data-soon="رفع صورة الملف الشخصي قادم قريباً"><i className="ti ti-upload" /> <span data-ar="تغيير الصورة">Change photo</span></button>
-                </div>
-              </div>
-              <div className="grid2">
-                <div className="field"><label data-ar="الاسم الكامل">Full name</label><input className="input" defaultValue={user?.fullName} /></div>
-                <div className="field"><label data-ar="اسم المستخدم">Username</label><input className="input" defaultValue={user?.username} readOnly /></div>
-              </div>
-              <div className="row" style={{ justifyContent: 'flex-end', marginTop: 16 }}>
-                <button className="btn btn-primary btn-sm" data-soon="حفظ الملف الشخصي قادم قريباً — أمّا البريد والهاتف فيُحفظان من قسم الإشعارات"><i className="ti ti-check" /> <span data-ar="حفظ التغييرات">Save changes</span></button>
-              </div>
-            </div>
+            <ProfileCard
+              initial={{ fullName: user?.fullName || '', username: user?.username || '', avatarUrl: user?.avatarUrl || '' }}
+              roleLabel={role}
+            />
 
-            <div className="card scard">
+            <PasswordCard />
+
+            <div className="card scard" id="language">
               <h2 data-ar="اللغة والمظهر">Language &amp; theme</h2>
               <div className="sub" data-ar="اختر لغة الواجهة">Choose your interface language</div>
               <div className="frow">
@@ -65,12 +54,14 @@ export default async function SettingsPage() {
               </div>
             </div>
 
-            <NotificationSettings
-              initial={{ email: user?.email || '', phone: user?.phone || '', notifyEmail: user?.notifyEmail ?? true, notifyWhatsapp: user?.notifyWhatsapp ?? true }}
-              whatsappReady={whatsappReady}
-            />
+            <div id="notifications">
+              <NotificationSettings
+                initial={{ email: user?.email || '', phone: user?.phone || '', notifyEmail: user?.notifyEmail ?? true, notifyWhatsapp: user?.notifyWhatsapp ?? true }}
+                whatsappReady={whatsappReady}
+              />
+            </div>
 
-            <div className="card scard" style={{ marginBottom: 0 }}>
+            <div className="card scard" id="support" style={{ marginBottom: 0 }}>
               <h2 data-ar="الدعم والحساب">Support &amp; account</h2>
               <div className="sub" data-ar="فريق FLX جاهز لمساعدتك">The FLX team is here to help</div>
               <div className="row" style={{ gap: 10 }}>

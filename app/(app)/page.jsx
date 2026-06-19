@@ -1,6 +1,7 @@
 import { getCurrentUser } from '@/lib/auth';
 import { prisma } from '@/lib/db';
 import { getActiveClientId } from '@/lib/access';
+import { canUpload, canApprove } from '@/lib/permissions';
 import PostsBoard from '@/components/PostsBoard';
 
 export const dynamic = 'force-dynamic';
@@ -32,6 +33,8 @@ export default async function HomePage() {
       banner={client?.bannerUrl || null}
       clientName={client?.name || ''}
       clientNameAr={client?.nameAr || ''}
+      canUpload={canUpload(user?.role)}
+      canApprove={canApprove(user?.role)}
     />
   );
 }

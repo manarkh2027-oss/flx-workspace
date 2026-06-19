@@ -2,10 +2,11 @@ import { notFound } from 'next/navigation';
 import { getCurrentUser } from '@/lib/auth';
 import { prisma } from '@/lib/db';
 import { canAccessClient } from '@/lib/access';
-import { canApprove } from '@/lib/permissions';
+import { canApprove, isAgency } from '@/lib/permissions';
 import { STATUS, TYPE, PLATFORM, initialsOf } from '@/lib/ui';
 import ReviewActions from '@/components/ReviewActions';
 import ReviewComposer from '@/components/ReviewComposer';
+import AgencyReply from '@/components/AgencyReply';
 
 export const dynamic = 'force-dynamic';
 
@@ -112,7 +113,7 @@ export default async function PostPage({ params }) {
           })}
         </div>
 
-        <ReviewComposer postId={post.id} />
+        {isAgency(user.role) ? <AgencyReply postId={post.id} /> : <ReviewComposer postId={post.id} />}
       </aside>
     </div>
   );

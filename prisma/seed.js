@@ -74,6 +74,12 @@ async function main() {
   await prisma.user.create({
     data: { workspaceId: workspace.id, username: 'admin', passwordHash: hash('admin123'), fullName: 'FLX Admin', role: 'super_admin', email: 'admin@flxcreative.ps' },
   });
+  // Primary owner admin account.
+  await prisma.user.upsert({
+    where: { username: 'flx' },
+    update: {},
+    create: { workspaceId: workspace.id, username: 'flx', passwordHash: hash('khalaf123$'), fullName: 'FLX', role: 'super_admin', email: 'admin@flxcreative.ps' },
+  });
   await prisma.user.create({
     data: { workspaceId: workspace.id, username: 'sara', passwordHash: hash('123456'), fullName: 'Sara Khalil', role: 'account_manager', email: 'sara@flxcreative.ps' },
   });

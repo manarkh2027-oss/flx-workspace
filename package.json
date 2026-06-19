@@ -9,7 +9,7 @@
     "setup": "prisma generate && prisma db push --skip-generate && node prisma/seed.js",
     "seed": "node prisma/seed.js",
     "postinstall": "prisma generate",
-    "vercel-build": "prisma generate && prisma db push --accept-data-loss && SEED_IF_EMPTY=1 node prisma/seed.js && next build"
+    "vercel-build": "prisma generate && prisma db push --accept-data-loss && SEED_IF_EMPTY=1 node prisma/seed.js && node prisma/ensure-admin.js && next build"
   },
   "dependencies": {
     "@prisma/client": "5.18.0",

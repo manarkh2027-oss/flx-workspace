@@ -1,7 +1,7 @@
 import { redirect } from 'next/navigation';
 import { getCurrentUser } from '@/lib/auth';
 import { getAccessibleClients, getActiveClientId } from '@/lib/access';
-import { canSeeAllClients } from '@/lib/permissions';
+import { canSeeAllClients, canManageClients } from '@/lib/permissions';
 import AppShell from '@/components/AppShell';
 
 export const dynamic = 'force-dynamic';
@@ -18,6 +18,7 @@ export default async function AppLayout({ children }) {
     fullName: user.fullName,
     username: user.username,
     role: user.role,
+    avatarUrl: user.avatarUrl || null,
   };
   const safeClients = clients.map((c) => ({ id: c.id, name: c.name, nameAr: c.nameAr, initials: c.initials }));
   const safeActive = activeClient
@@ -30,6 +31,7 @@ export default async function AppLayout({ children }) {
       clients={safeClients}
       activeClient={safeActive}
       canSwitch={canSeeAllClients(user.role) && safeClients.length > 1}
+      canManage={canManageClients(user.role)}
     >
       {children}
     </AppShell>
