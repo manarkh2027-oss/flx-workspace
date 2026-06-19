@@ -7,7 +7,7 @@ import { notifyClientUsers } from '@/lib/notify';
 import { appBaseUrl } from '@/lib/appUrl';
 
 const TYPES = ['video', 'image', 'design', 'copy'];
-const PLATFORMS = ['instagram', 'facebook', 'x', 'youtube', 'tiktok'];
+const PLATFORMS = ['instagram', 'facebook', 'x', 'youtube', 'tiktok', 'linkedin'];
 const DOW = [
   { en: 'Sun', ar: 'الأحد' }, { en: 'Mon', ar: 'الإثنين' }, { en: 'Tue', ar: 'الثلاثاء' },
   { en: 'Wed', ar: 'الأربعاء' }, { en: 'Thu', ar: 'الخميس' }, { en: 'Fri', ar: 'الجمعة' }, { en: 'Sat', ar: 'السبت' },
@@ -59,4 +59,23 @@ export async function PATCH(req, { params }) {
     .catch((e) => console.error('notify(edit) failed:', e.message));
 
   return NextResponse.json({ ok: true, id: post.id });
+}
+
+// Agency-side: permanently delete a single material (and its comments).
+export async function DELETE(req, { params }) {
+  const user = await getCurrentUser();
+  if (!user) return NextResponse.json({ error: 'unauthorized' }, { status: 401 });
+  if (!canUpload(user.role)) return NextResponse.json({ error: 'forbidden' }, { status: 403 });
+
+  const post = await prisma.post.findUnique({ where: { id: params.id }, select: { id: true, clientId: true } });
+  if (!post || !(await canAccessClient(user, post.clientId))) {
+    return NextResponse.json({ error: 'not found' }, { status: 404 });
+  }
+
+  await prisma.$transaction([
+    prisma.comment.deleteMany({ where: { postId: post.id } }),
+    prisma.post.delete({ where: { id: post.id } }),
+  ]);
+
+  return NextResponse.json({ ok: true });
 }

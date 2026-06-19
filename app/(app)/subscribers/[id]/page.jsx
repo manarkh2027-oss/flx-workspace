@@ -7,6 +7,7 @@ import { canManageClients } from '@/lib/permissions';
 import { STATUS, TYPE, PLATFORM } from '@/lib/ui';
 import AddMaterial from '@/components/AddMaterial';
 import DeleteClient from '@/components/DeleteClient';
+import PublishBar from '@/components/PublishBar';
 
 export const dynamic = 'force-dynamic';
 
@@ -30,6 +31,8 @@ export default async function SubscriberDetail({ params }) {
   function Card({ p }) {
     const t = TYPE[p.type] || TYPE.copy;
     const s = STATUS[p.status] || STATUS.review;
+    let requested = [];
+    try { requested = p.platforms ? JSON.parse(p.platforms) : []; } catch {}
     const isVideo = p.type === 'video' && p.mediaUrl;
     const isImg = (p.type === 'image' || p.type === 'design') && p.mediaUrl;
     const revisionNote = p.status === 'revision'
@@ -62,6 +65,7 @@ export default async function SubscriberDetail({ params }) {
           </Link>
           <AddMaterial className="btn btn-sm" post={{ id: p.id, type: p.type, title: p.title, body: p.body || '', platform: p.platform, publishAt: p.publishAt, mediaUrl: p.mediaUrl }} />
         </div>
+        <PublishBar postId={p.id} requested={requested} platform={p.platform} publishAt={p.publishAt ? p.publishAt.toISOString() : null} status={p.status} />
       </div>
     );
   }

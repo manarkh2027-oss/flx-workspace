@@ -8,6 +8,8 @@ import ReviewActions from '@/components/ReviewActions';
 import ReviewComposer from '@/components/ReviewComposer';
 import AgencyReply from '@/components/AgencyReply';
 import AddMaterial from '@/components/AddMaterial';
+import PublishBar from '@/components/PublishBar';
+import ClientPlatforms from '@/components/ClientPlatforms';
 
 export const dynamic = 'force-dynamic';
 
@@ -35,6 +37,8 @@ export default async function PostPage({ params }) {
   const t = TYPE[post.type] || TYPE.copy;
   const s = STATUS[post.status] || STATUS.review;
   const allowApprove = canApprove(user.role);
+  let postPlatforms = [];
+  try { postPlatforms = post.platforms ? JSON.parse(post.platforms) : []; } catch {}
   const avatarColors = ['', 'a2', 'a3', 'a4', 'a5'];
 
   return (
@@ -93,6 +97,12 @@ export default async function PostPage({ params }) {
               <div className="approve-note"><i className="ti ti-info-circle" /> <span data-ar="الاعتماد النهائي من صلاحية العميل">Final approval is the client's to give</span></div>
             )}
           </div>
+
+          {isAgency(user.role) ? (
+            <PublishBar postId={post.id} requested={postPlatforms} platform={post.platform} publishAt={post.publishAt ? post.publishAt.toISOString() : null} status={post.status} />
+          ) : (
+            <ClientPlatforms postId={post.id} initial={postPlatforms} platform={post.platform} publishAt={post.publishAt ? post.publishAt.toISOString() : null} status={post.status} />
+          )}
         </div>
       </section>
 

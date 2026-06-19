@@ -80,7 +80,8 @@ model Post {
   title      String
   titleAr    String?
   type       String    // video | image | design | copy
-  platform   String    // instagram | x | youtube | tiktok | facebook
+  platform   String    // instagram | x | youtube | tiktok | facebook | linkedin
+  platforms  String?   // JSON array of platforms the CLIENT requested to publish on
   status     String    @default("review") // review | revision | approved | published
   version    Int       @default(1)
   publishAt  DateTime?

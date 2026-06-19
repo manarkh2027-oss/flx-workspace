@@ -15,17 +15,23 @@ export default async function HomePage() {
     ? await prisma.post.findMany({ where: { clientId }, orderBy: { createdAt: 'asc' } })
     : [];
 
-  const data = posts.map((p) => ({
-    id: p.id,
-    title: p.title,
-    titleAr: p.titleAr,
-    type: p.type,
-    platform: p.platform,
-    status: p.status,
-    dayEn: p.dayEn,
-    dayAr: p.dayAr,
-    mediaUrl: p.mediaUrl,
-  }));
+  const data = posts.map((p) => {
+    let platforms = [];
+    try { platforms = p.platforms ? JSON.parse(p.platforms) : []; } catch {}
+    return {
+      id: p.id,
+      title: p.title,
+      titleAr: p.titleAr,
+      type: p.type,
+      platform: p.platform,
+      platforms,
+      status: p.status,
+      dayEn: p.dayEn,
+      dayAr: p.dayAr,
+      mediaUrl: p.mediaUrl,
+      publishAt: p.publishAt ? p.publishAt.toISOString() : null,
+    };
+  });
 
   return (
     <PostsBoard

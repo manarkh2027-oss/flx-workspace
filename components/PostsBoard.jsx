@@ -4,6 +4,8 @@ import Link from 'next/link';
 import { STATUS, TYPE, PLATFORM } from '@/lib/ui';
 import AddMaterial from '@/components/AddMaterial';
 import CardActions from '@/components/CardActions';
+import ClientPlatforms from '@/components/ClientPlatforms';
+import PublishBar from '@/components/PublishBar';
 
 const FILTERS = [
   { key: 'all', icon: 'ti-layout-grid', en: 'All', ar: 'الكل' },
@@ -13,7 +15,7 @@ const FILTERS = [
   { key: 'copy', icon: 'ti-typography', en: 'Copy', ar: 'نصوص' },
 ];
 
-function Card({ p, canApprove }) {
+function Card({ p, canApprove, canUpload }) {
   const t = TYPE[p.type] || TYPE.copy;
   const s = STATUS[p.status] || STATUS.review;
   const isVideo = p.type === 'video' && p.mediaUrl;
@@ -43,7 +45,14 @@ function Card({ p, canApprove }) {
           </div>
         </div>
       </Link>
-      {canApprove && <CardActions postId={p.id} status={p.status} />}
+      {canUpload ? (
+        <PublishBar postId={p.id} requested={p.platforms || []} platform={p.platform} publishAt={p.publishAt} status={p.status} />
+      ) : canApprove ? (
+        <>
+          <CardActions postId={p.id} status={p.status} />
+          <ClientPlatforms postId={p.id} initial={p.platforms || []} platform={p.platform} publishAt={p.publishAt} status={p.status} />
+        </>
+      ) : null}
     </div>
   );
 }
@@ -107,7 +116,7 @@ export default function PostsBoard({ posts, banner, clientName, clientNameAr, ca
 
       {pending.length > 0 && (
         <div className="posts">
-          {pending.map((p) => <Card key={p.id} p={p} canApprove={canApprove} />)}
+          {pending.map((p) => <Card key={p.id} p={p} canApprove={canApprove} canUpload={canUpload} />)}
         </div>
       )}
 
@@ -119,7 +128,7 @@ export default function PostsBoard({ posts, banner, clientName, clientNameAr, ca
             <span className="cnt">{approved.length}</span>
           </div>
           <div className="posts">
-            {approved.map((p) => <Card key={p.id} p={p} canApprove={canApprove} />)}
+            {approved.map((p) => <Card key={p.id} p={p} canApprove={canApprove} canUpload={canUpload} />)}
           </div>
         </>
       )}
