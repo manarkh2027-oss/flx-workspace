@@ -125,6 +125,14 @@ html[dir="rtl"] select.input{background-position:left 12px center}
 .rev-note{margin-top:9px;display:flex;gap:7px;align-items:flex-start;font-size:12px;color:var(--amber-ink);background:var(--amber-soft);padding:7px 9px;border-radius:8px;line-height:1.45}
 .rev-note i{font-size:15px;flex:none;margin-top:1px}
 
+/* destructive confirm */
+.btn-danger{background:var(--red-ink,#C0392B);color:#fff;border:none}
+.btn-danger:hover{filter:brightness(1.06)}
+.confirm-danger{display:flex;gap:13px;align-items:flex-start}
+.confirm-danger .ic{width:40px;height:40px;border-radius:11px;flex:none;display:flex;align-items:center;justify-content:center;font-size:21px;background:var(--red-soft);color:var(--red-ink)}
+.confirm-danger .t{font-size:14.5px;font-weight:600;margin-bottom:5px;line-height:1.4}
+.confirm-danger .d{font-size:13px;color:var(--ink-2);line-height:1.55}
+
 /* labeled divider inside forms */
 .set-divider{display:flex;align-items:center;gap:10px;margin:4px 0 2px;font-size:11.5px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--ink-4)}
 .set-divider::after{content:"";flex:1;height:1px;background:var(--border)}

@@ -6,6 +6,7 @@ import { canAccessClient } from '@/lib/access';
 import { canManageClients } from '@/lib/permissions';
 import { STATUS, TYPE, PLATFORM } from '@/lib/ui';
 import AddMaterial from '@/components/AddMaterial';
+import DeleteClient from '@/components/DeleteClient';
 
 export const dynamic = 'force-dynamic';
 
@@ -79,7 +80,10 @@ export default async function SubscriberDetail({ params }) {
               <div className="muted" data-ar={`${posts.length} مواد · ${pending.length} بانتظار الاعتماد`}>{`${posts.length} materials · ${pending.length} pending`}</div>
             </div>
           </div>
-          <AddMaterial clientId={client.id} />
+          <div className="row" style={{ gap: 8 }}>
+            <DeleteClient clientId={client.id} clientName={client.name} clientNameAr={client.nameAr} />
+            <AddMaterial clientId={client.id} />
+          </div>
         </div>
       </div>
 
