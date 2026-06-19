@@ -19,9 +19,16 @@ export async function POST(req, { params }) {
   }
   if (!canApprove(user.role)) return NextResponse.json({ error: 'forbidden' }, { status: 403 });
 
-  const { status } = await req.json().catch(() => ({}));
+  const { status, note } = await req.json().catch(() => ({}));
   if (!['approved', 'revision'].includes(status)) {
     return NextResponse.json({ error: 'bad status' }, { status: 400 });
+  }
+
+  // A revision request carries the client's note — saved as a visible comment
+  // so the editor/designer sees exactly what to change.
+  const revisionNote = String(note || '').trim();
+  if (status === 'revision' && revisionNote) {
+    await prisma.comment.create({ data: { postId: post.id, authorId: user.id, body: '🔄 ' + revisionNote } });
   }
 
   await prisma.post.update({ where: { id: post.id }, data: { status } });

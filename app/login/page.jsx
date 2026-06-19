@@ -4,8 +4,8 @@ import { useRouter } from 'next/navigation';
 
 export default function LoginPage() {
   const router = useRouter();
-  const [username, setUsername] = useState('lina');
-  const [password, setPassword] = useState('123456');
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
   const [show, setShow] = useState(false);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
@@ -114,7 +114,8 @@ export default function LoginPage() {
           </form>
 
           <div className="form-foot">
-            <span data-ar="بيانات تجريبية:">Demo login:</span> <b>lina / 123456</b>
+            <span data-ar="تحتاج صلاحية دخول؟">Need access?</span>{' '}
+            <a className="link" href="mailto:support@flxcreative.ps?subject=FLX%20Workspace%20access" data-ar="تواصل مع فريق FLX">Ask the FLX team</a>
           </div>
         </div>
         <div className="form-meta" data-ar="محمي من FLX · تشفير كامل · English available">Protected by FLX · End-to-end encrypted · العربية متاحة</div>
