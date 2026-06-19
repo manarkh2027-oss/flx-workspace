@@ -25,12 +25,19 @@ export default function AddMaterial({ clientId, defaultDate, label, className, p
   // For an existing video stored as a link (not a data-URL), start in "link" mode.
   const editIsLink = isEdit && post.type === 'video' && post.mediaUrl && !post.mediaUrl.startsWith('data:');
 
+  // datetime-local wants "YYYY-MM-DDTHH:MM"; the calendar passes a date-only default.
+  const initDate = () => {
+    if (post?.publishAt) return String(post.publishAt).slice(0, 16);
+    if (defaultDate) return defaultDate.length === 10 ? `${defaultDate}T12:00` : defaultDate.slice(0, 16);
+    return '';
+  };
+
   const [open, setOpen] = useState(false);
   const [type, setType] = useState(post?.type || 'image');
   const [title, setTitle] = useState(post?.title || '');
   const [body, setBody] = useState(post?.body || '');
   const [platform, setPlatform] = useState(post?.platform || 'instagram');
-  const [date, setDate] = useState((post?.publishAt ? String(post.publishAt).slice(0, 10) : defaultDate) || '');
+  const [date, setDate] = useState(initDate);
   const [media, setMedia] = useState(isEdit && !editIsLink ? (post.mediaUrl || '') : '');     // data-url or link
   const [mediaName, setMediaName] = useState('');
   const [videoMode, setVideoMode] = useState(editIsLink ? 'link' : 'file'); // file | link
@@ -40,7 +47,7 @@ export default function AddMaterial({ clientId, defaultDate, label, className, p
   function reset() {
     setType(post?.type || 'image'); setTitle(post?.title || ''); setBody(post?.body || '');
     setPlatform(post?.platform || 'instagram');
-    setDate((post?.publishAt ? String(post.publishAt).slice(0, 10) : defaultDate) || '');
+    setDate(initDate());
     setMedia(isEdit && !editIsLink ? (post.mediaUrl || '') : ''); setMediaName('');
     setVideoMode(editIsLink ? 'link' : 'file'); setLink(editIsLink ? post.mediaUrl : '');
   }
@@ -162,8 +169,8 @@ export default function AddMaterial({ clientId, defaultDate, label, className, p
                   </select>
                 </div>
                 <div className="field">
-                  <label data-ar="تاريخ النشر (اختياري)">Publish date (optional)</label>
-                  <input className="input" type="date" dir="ltr" value={date} onChange={(e) => setDate(e.target.value)} />
+                  <label data-ar="موعد النشر (اختياري)">Publish date &amp; time (optional)</label>
+                  <input className="input" type="datetime-local" dir="ltr" value={date} onChange={(e) => setDate(e.target.value)} />
                 </div>
               </div>
             </div>

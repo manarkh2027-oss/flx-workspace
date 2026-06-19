@@ -29,7 +29,7 @@ export default function ClientPlatforms({ postId, initial = [], platform, publis
   }
 
   const scheduled = publishAt && (status === 'approved' || status === 'published');
-  const dateStr = publishAt ? new Date(publishAt).toLocaleDateString('ar-EG', { day: 'numeric', month: 'long' }) : '';
+  const dateStr = publishAt ? new Date(publishAt).toLocaleString('ar-EG', { day: 'numeric', month: 'long', hour: '2-digit', minute: '2-digit' }) : '';
 
   return (
     <div className="plat-client">

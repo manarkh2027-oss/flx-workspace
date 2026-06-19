@@ -9,7 +9,7 @@ import { toast } from '@/lib/toast';
 export default function PublishBar({ postId, requested = [], platform, publishAt, status }) {
   const router = useRouter();
   const [pick, setPick] = useState(null);   // platform key being acted on
-  const [date, setDate] = useState(publishAt ? String(publishAt).slice(0, 10) : '');
+  const [date, setDate] = useState(publishAt ? String(publishAt).slice(0, 16) : '');
   const [confirmDel, setConfirmDel] = useState(false);
   const [busy, setBusy] = useState(false);
 
@@ -40,7 +40,7 @@ export default function PublishBar({ postId, requested = [], platform, publishAt
   }
 
   const scheduled = publishAt && (status === 'approved' || status === 'published');
-  const dateStr = publishAt ? new Date(publishAt).toLocaleDateString('ar-EG', { day: 'numeric', month: 'long' }) : '';
+  const dateStr = publishAt ? new Date(publishAt).toLocaleString('ar-EG', { day: 'numeric', month: 'long', hour: '2-digit', minute: '2-digit' }) : '';
 
   return (
     <div className="publish-bar">
@@ -81,7 +81,7 @@ export default function PublishBar({ postId, requested = [], platform, publishAt
             <button type="button" className="btn btn-approve btn-sm" disabled={busy} onClick={() => publish(true)}>
               <i className="ti ti-send" /> <span data-ar="نشر فوري">Publish now</span>
             </button>
-            <input className="input input-sm" type="date" dir="ltr" value={date} onChange={(e) => setDate(e.target.value)} style={{ width: 150 }} />
+            <input className="input input-sm" type="datetime-local" dir="ltr" value={date} onChange={(e) => setDate(e.target.value)} style={{ width: 200 }} />
             <button type="button" className="btn btn-primary btn-sm" disabled={busy} onClick={() => publish(false)}>
               <i className="ti ti-calendar-plus" /> <span data-ar="جدولة">Schedule</span>
             </button>
