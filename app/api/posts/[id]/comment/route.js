@@ -24,16 +24,16 @@ export async function POST(req, { params }) {
 
   await prisma.comment.create({ data: { postId: post.id, authorId: user.id, body: text } });
 
-  try {
-    const payload = {
-      type: 'comment',
-      titleEn: `<b>${user.fullName}</b> commented on <b>${post.title}</b>`,
-      titleAr: `<b>${user.fullName}</b> علّق على <b>${post.title}</b>`,
-      link: appBaseUrl() + `/posts/${post.id}`,
-    };
-    if (isClient(user.role)) await notifyAgency(user.workspaceId, user.id, payload);
-    else await notifyClientUsers(post.clientId, user.id, payload);
-  } catch (e) { console.error('notify(comment) failed:', e.message); }
+  // Fire-and-forget: never block the button on email/WhatsApp delivery.
+  const payload = {
+    type: 'comment',
+    titleEn: `<b>${user.fullName}</b> commented on <b>${post.title}</b>`,
+    titleAr: `<b>${user.fullName}</b> علّق على <b>${post.title}</b>`,
+    link: appBaseUrl() + `/posts/${post.id}`,
+  };
+  Promise.resolve()
+    .then(() => (isClient(user.role) ? notifyAgency(user.workspaceId, user.id, payload) : notifyClientUsers(post.clientId, user.id, payload)))
+    .catch((e) => console.error('notify(comment) failed:', e.message));
 
   return NextResponse.json({ ok: true });
 }

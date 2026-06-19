@@ -26,17 +26,17 @@ export async function POST(req, { params }) {
 
   await prisma.post.update({ where: { id: post.id }, data: { status } });
 
-  try {
-    const approved = status === 'approved';
-    const payload = {
-      type: approved ? 'approval' : 'revision',
-      titleEn: approved ? `<b>${user.fullName}</b> approved <b>${post.title}</b>` : `<b>${user.fullName}</b> requested a revision on <b>${post.title}</b>`,
-      titleAr: approved ? `<b>${user.fullName}</b> اعتمد <b>${post.title}</b>` : `<b>${user.fullName}</b> طلب تعديلاً على <b>${post.title}</b>`,
-      link: appBaseUrl() + `/posts/${post.id}`,
-    };
-    if (isClient(user.role)) await notifyAgency(user.workspaceId, user.id, payload);
-    else await notifyClientUsers(post.clientId, user.id, payload);
-  } catch (e) { console.error('notify(status) failed:', e.message); }
+  // Fire-and-forget: never block the button on email/WhatsApp delivery.
+  const approved = status === 'approved';
+  const payload = {
+    type: approved ? 'approval' : 'revision',
+    titleEn: approved ? `<b>${user.fullName}</b> approved <b>${post.title}</b>` : `<b>${user.fullName}</b> requested a revision on <b>${post.title}</b>`,
+    titleAr: approved ? `<b>${user.fullName}</b> اعتمد <b>${post.title}</b>` : `<b>${user.fullName}</b> طلب تعديلاً على <b>${post.title}</b>`,
+    link: appBaseUrl() + `/posts/${post.id}`,
+  };
+  Promise.resolve()
+    .then(() => (isClient(user.role) ? notifyAgency(user.workspaceId, user.id, payload) : notifyClientUsers(post.clientId, user.id, payload)))
+    .catch((e) => console.error('notify(status) failed:', e.message));
 
   return NextResponse.json({ ok: true, status });
 }
