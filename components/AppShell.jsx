@@ -15,7 +15,11 @@ const NAV = [
   { href: '/brand', icon: 'ti-palette', en: 'Brand Hub', ar: 'الهوية البصرية' },
   { href: '/archive', icon: 'ti-archive', en: 'Archive', ar: 'الأرشيف' },
 ];
-const MANAGE_NAV = { href: '/subscribers', icon: 'ti-users', en: 'Subscribers', ar: 'الزبائن والمشتركين' };
+const MANAGE_NAV = [
+  { href: '/subscribers', icon: 'ti-users', en: 'Subscribers', ar: 'الزبائن والمشتركين' },
+  { href: '/scheduled', icon: 'ti-calendar-clock', en: 'Scheduled', ar: 'منشورات مجدولة للنشر' },
+  { href: '/published', icon: 'ti-checkbox', en: 'Published', ar: 'مواد منشورة' },
+];
 const NAV2 = [
   { href: '/notifications', icon: 'ti-bell', en: 'Notifications', ar: 'الإشعارات' },
   { href: '/settings', icon: 'ti-settings', en: 'Settings', ar: 'الإعدادات' },
@@ -27,6 +31,8 @@ const CRUMB = {
   '/brand': { en: 'Brand Hub', ar: 'الهوية البصرية' },
   '/archive': { en: 'Archive', ar: 'الأرشيف' },
   '/subscribers': { en: 'Subscribers', ar: 'الزبائن والمشتركين' },
+  '/scheduled': { en: 'Scheduled', ar: 'منشورات مجدولة للنشر' },
+  '/published': { en: 'Published', ar: 'مواد منشورة' },
   '/notifications': { en: 'Notifications', ar: 'الإشعارات' },
   '/settings': { en: 'Settings', ar: 'الإعدادات' },
 };
@@ -124,11 +130,11 @@ export default function AppShell({ user, clients, activeClient, canSwitch, canMa
               <i className={'ti ' + n.icon} /> <span data-ar={n.ar}>{n.en}</span>
             </Link>
           ))}
-          {canManage && (
-            <Link href={MANAGE_NAV.href} className={'nav-item' + (isActive(MANAGE_NAV.href) ? ' active' : '')}>
-              <i className={'ti ' + MANAGE_NAV.icon} /> <span data-ar={MANAGE_NAV.ar}>{MANAGE_NAV.en}</span>
+          {canManage && MANAGE_NAV.map((n) => (
+            <Link key={n.href} href={n.href} className={'nav-item' + (isActive(n.href) ? ' active' : '')}>
+              <i className={'ti ' + n.icon} /> <span data-ar={n.ar}>{n.en}</span>
             </Link>
-          )}
+          ))}
           <div className="nav-label" data-ar="خاص بك">For you</div>
           {NAV2.map((n) => (
             <Link key={n.href} href={n.href} className={'nav-item' + (isActive(n.href) ? ' active' : '')}>

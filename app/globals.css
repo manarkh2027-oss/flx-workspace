@@ -390,6 +390,12 @@ body.lang-ar .display,body.lang-ar .h1,body.lang-ar .h2,body.lang-ar .h3{letter-
   /* Login: hide the decorative panel, form fills the screen */
   .auth{grid-template-columns:1fr}
   .brand-panel{display:none}
+
+  /* Admin timeline rows wrap on small screens */
+  .tl-row{grid-template-columns:60px 1fr;grid-auto-rows:auto;row-gap:6px}
+  .tl-row .tl-title{grid-column:1 / -1}
+  .tl-row .tl-plat{grid-column:1 / -1}
+  .tl-row .tl-go{display:none}
 }
 
 @media (max-width: 480px){
