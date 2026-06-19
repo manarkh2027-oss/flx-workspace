@@ -4,6 +4,7 @@ import { getCurrentUser } from '@/lib/auth';
 import { prisma } from '@/lib/db';
 import { getAccessibleClients } from '@/lib/access';
 import { canManageClients } from '@/lib/permissions';
+import AddSubscriber from '@/components/AddSubscriber';
 
 export const dynamic = 'force-dynamic';
 
@@ -28,8 +29,13 @@ export default async function SubscribersPage() {
   return (
     <div className="page">
       <div className="page-head">
-        <div className="display" data-ar="الزبائن والمشتركين">Subscribers</div>
-        <div className="muted" data-ar="كل العملاء — افتح أي عميل لرفع المواد ومتابعة الاعتماد">All clients — open one to upload materials and track approvals</div>
+        <div className="row" style={{ justifyContent: 'space-between', alignItems: 'flex-end', flexWrap: 'wrap', gap: 12 }}>
+          <div>
+            <div className="display" data-ar="الزبائن والمشتركين">Subscribers</div>
+            <div className="muted" data-ar="كل العملاء — افتح أي عميل لرفع المواد ومتابعة الاعتماد">All clients — open one to upload materials and track approvals</div>
+          </div>
+          <AddSubscriber />
+        </div>
       </div>
 
       <div className="subs-grid">
